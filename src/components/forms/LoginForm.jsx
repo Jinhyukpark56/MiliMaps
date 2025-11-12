@@ -1,13 +1,35 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/LoginForm.css";
 
-function LoginForm({ onSignUpClick }) {
+// function LoginForm({ onSignUpClick }) {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     alert(`이메일: ${email}\n비밀번호: ${password}`);
+//   };
+
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`이메일: ${email}\n비밀번호: ${password}`);
+
+    // 
+    if (!email.trim() || !password.trim()) {
+      window.alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+    //  백엔드 연결 전이므로 임시로 바로 메인 페이지 이동
+    navigate("/main");
+  };
+
+  const handleSignUpClick = () => {
+    navigate("/signup");
   };
 
   return (
@@ -29,7 +51,7 @@ function LoginForm({ onSignUpClick }) {
       <div className="login-links">
         <span className="link">비밀번호 찾기</span>
         <span className="divider">|</span>
-        <span className="link" onClick={onSignUpClick}>
+        <span className="link" onClick={handleSignUpClick}>
           회원가입
         </span>
       </div>
