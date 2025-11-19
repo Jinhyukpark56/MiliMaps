@@ -14,6 +14,22 @@
     border-bottom-right-radius: 30px;
 }
 
+
+.tab-bar-rectangular {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--app-width);
+    height: 65px;
+    background-color: #2d352a;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #4a5548;
+}
+
+
 .tab-button {
     flex: 1;
     background: none;
