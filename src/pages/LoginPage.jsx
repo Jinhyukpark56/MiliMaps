@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/LoginPage.css"; // 스타일 분리
+import "../styles/LoginPage.css";
 import LoginForm from "../components/forms/LoginForm";
 import SignUpForm from "../components/forms/SignUpForm";
 

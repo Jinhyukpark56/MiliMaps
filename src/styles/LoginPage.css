@@ -1,20 +1,20 @@
+/* ===== 페이지 전체 ===== */
 .app-frame {
+  background-color: var(--background-color); /* 메인페이지와 같은 베이지색 */
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #000; /* 전체 배경 검정 */
   height: 100vh;
-  width: 100%;
+  margin: 0;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
-/* 중앙 카드 형태 */
+/* ===== 폼 wrapper ===== */
 .form-wrapper {
-  width: 360px;
-  height: 640px;
-  background-color: #2d352a; /* 어두운 국방색 */
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15); /* 골드빛 그림자 */
+  background: none; /* ✅ 배경 제거 */
+  box-shadow: none; /* ✅ 그림자 제거 */
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
