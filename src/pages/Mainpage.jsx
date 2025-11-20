@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DdayCounter from "../components/forms/DdayCounter";
 import DdaySettingForm from "../components/forms/DdaySettingForm";
 import "../styles/MainPage.css";
+import TabBar from "../components/forms/TabBar";
 
 function MainPage() {
   const [settings, setSettings] = useState(null);
@@ -44,7 +45,7 @@ function MainPage() {
 
         {/* ===== 하단: 메뉴바 (추후 추가 예정) ===== */}
         <footer className="bottom-section">
-          <p>메뉴바 섹션 (추후 추가 예정)</p>
+          <TabBar />
         </footer>
       </div>
     </div>
