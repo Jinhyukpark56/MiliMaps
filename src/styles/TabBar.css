@@ -1,4 +1,3 @@
-
 .tab-bar {
     position: fixed;
     bottom: 0;
@@ -33,7 +32,6 @@
 .tab-button:hover {
     color: var(--light-text-color);
 }
-
 .icon {
     font-size: 22px;
 }
