@@ -32,11 +32,10 @@
 .tab-button:hover {
     color: var(--light-text-color);
 }
-
 .icon {
     font-size: 22px;
 }
 
 .label {
-    font-size: 12px;
+    font-size: 11px;
 }
