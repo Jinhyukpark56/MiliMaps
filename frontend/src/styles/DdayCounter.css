@@ -1,68 +1,68 @@
 .dday-card {
-  background-color: var(--primary-color);
-  color: var(--light-text-color);
+  background-color: #f4f1e6;
+  padding: 22px;
   border-radius: 18px;
-  padding: 25px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  text-align: center;
-  transition: transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #333;
 }
 
-.dday-card:hover {
-  transform: scale(1.02);
-}
-
+/* ===== 헤더 영역: 이름 + 톱니바퀴 정렬 ===== */
 .dday-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.settings-btn {
-  background: none;
-  border: none;
-  color: var(--accent-color);
-  font-size: 1.4rem;
-  cursor: pointer;
+  margin-bottom: 12px;
 }
 
 .dday-name {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: var(--accent-color);
+  margin: 0;
 }
 
-.dday-info {
+.dday-setting-btn.small {
+  background-color: #55644a;
+  color: #d7c98b;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 12px;
   font-size: 0.9rem;
-  margin-top: 5px;
-  color: var(--light-text-color);
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
+/* ===== 텍스트 정보 ===== */
+.dday-info {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* ===== 진행률 바 ===== */
 .progress-container {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  overflow: hidden;
+  margin-top: 16px;
+}
+
+.progress-bar {
+  background-color: #d9d9d9;
+  border-radius: 12px;
   position: relative;
-  height: 16px;
-  margin-top: 15px;
+  height: 22px;
+  overflow: hidden;
 }
 
 .progress-fill {
-  background-color: var(--accent-color);
+  background-color: #6d8f6c;
   height: 100%;
   transition: width 0.3s ease;
 }
 
 .progress-overlay {
   position: absolute;
-  width: 100%;
-  text-align: center;
-  top: 0;
-  left: 0;
-  font-size: 0.8rem;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
   font-weight: 700;
-  color: #fff;
-  line-height: 16px;
+  color: #333;
 }

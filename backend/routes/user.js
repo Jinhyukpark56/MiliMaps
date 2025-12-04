@@ -19,22 +19,21 @@ router.post("/signup", async (req, res) => {
   const { email, password, nickname, enlistDate, serviceDays } = req.body;
 
   try {
+    // 이메일 중복 체크
     const [exist] = await pool.query(
       "SELECT * FROM user WHERE email = ?",
       [email]
     );
 
     if (exist.length > 0) {
-      return res.json({
+      return res.status(400).json({
         status: "error",
         message: "이미 존재하는 이메일입니다",
       });
     }
 
-    // 비밀번호 해싱
     const hashed = await bcrypt.hash(password, 10);
 
-    // 전역일 계산
     const dischargeDate = calcDischargeDate(enlistDate, serviceDays);
 
     await pool.query(
@@ -42,10 +41,17 @@ router.post("/signup", async (req, res) => {
       [email, hashed, nickname, enlistDate, serviceDays, dischargeDate]
     );
 
-    res.json({ status: "success", message: "회원가입 완료" });
+    return res.json({
+      status: "success",
+      message: "회원가입 완료",
+    });
+
   } catch (err) {
     console.error(err);
-    res.json({ status: "error", message: "서버 오류" });
+    return res.status(500).json({
+      status: "error",
+      message: "서버 오류",
+    });
   }
 });
 
@@ -60,7 +66,7 @@ router.post("/login", async (req, res) => {
     );
 
     if (rows.length === 0) {
-      return res.json({
+      return res.status(400).json({
         status: "error",
         message: "존재하지 않는 이메일입니다",
       });
@@ -71,26 +77,33 @@ router.post("/login", async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.json({ status: "error", message: "비밀번호가 틀렸습니다" });
+      return res.status(400).json({
+        status: "error",
+        message: "비밀번호가 틀렸습니다",
+      });
     }
 
-    // 토큰 발급
+    // 토큰 발급 (DB 컬럼 userId 기준)
     const token = jwt.sign(
       { id: user.userId },
       JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    res.json({
+    return res.json({
       status: "success",
       token,
       nickname: user.nickname,
       dischargeDate: user.dischargeDate,
+      role: user.role,
     });
 
   } catch (err) {
     console.error(err);
-    res.json({ status: "error", message: "서버 오류" });
+    return res.status(500).json({
+      status: "error",
+      message: "서버 오류",
+    });
   }
 });
 
@@ -98,8 +111,11 @@ router.post("/login", async (req, res) => {
 router.get("/me", async (req, res) => {
   const auth = req.headers.authorization;
 
-  if (!auth) {
-    return res.json({ status: "error", message: "토큰 없음" });
+  if (!auth || !auth.startsWith("Bearer ")) {
+    return res.status(401).json({
+      status: "error",
+      message: "토큰 없음",
+    });
   }
 
   const token = auth.split(" ")[1];
@@ -108,14 +124,32 @@ router.get("/me", async (req, res) => {
     const decoded = jwt.verify(token, JWT_SECRET);
 
     const [rows] = await pool.query(
-      "SELECT * FROM user WHERE userid = ?",
+      `
+  SELECT userId, email, nickname, role, enlistDate, serviceDays, dischargeDate
+  FROM user
+  WHERE userId = ?
+  `,
       [decoded.id]
     );
 
-    res.json({ status: "success", user: rows[0] });
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        status: "error",
+        message: "유저를 찾을 수 없습니다",
+      });
+    }
+
+    return res.json({
+      status: "success",
+      user: rows[0],
+    });
 
   } catch (err) {
-    res.json({ status: "error", message: "토큰 오류" });
+    return res.status(401).json({
+      status: "error",
+      message: "토큰 오류",
+    });
   }
 });
 

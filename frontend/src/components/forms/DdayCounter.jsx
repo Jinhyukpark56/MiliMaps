@@ -5,8 +5,9 @@ function DdayCounter({ name, startDate, endDate, onOpenSettings }) {
   const [daysLeft, setDaysLeft] = useState(null);
   const [passedDays, setPassedDays] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [rank, setRank] = useState("훈련병"); // 계급 상태 추가
+  const [rank, setRank] = useState("훈련병");
 
+  // ===== 전역 정보 계산 =====
   useEffect(() => {
     if (startDate && endDate) {
       const today = new Date();
@@ -17,16 +18,13 @@ function DdayCounter({ name, startDate, endDate, onOpenSettings }) {
       const passed = Math.ceil((today - start) / (1000 * 60 * 60 * 24));
       const left = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
 
-      const progressValue = Math.min(
-        Math.max((passed / totalDays) * 100, 0),
-        100
-      );
+      const progressValue = Math.min(Math.max((passed / totalDays) * 100, 0), 100);
 
       setPassedDays(passed);
       setDaysLeft(left);
       setProgress(progressValue);
 
-      // 대한민국 육군 18개월(547일) 기준 계급 판별 로직
+      // 계급 계산 (대한민국 육군 기준 예시)
       if (passed < 91) setRank("이등병");
       else if (passed < 181) setRank("일병");
       else if (passed < 366) setRank("상병");
@@ -35,34 +33,34 @@ function DdayCounter({ name, startDate, endDate, onOpenSettings }) {
     }
   }, [startDate, endDate]);
 
+  // ===== 전역 정보 없음 → 기본 안내 화면 =====
   if (!name || !startDate || !endDate) {
     return (
       <div className="dday-card">
         <p className="dday-placeholder">⚙️ 전역 정보를 설정해주세요.</p>
-        <button className="settings-btn" onClick={onOpenSettings}>
+        <button className="dday-setting-btn" onClick={onOpenSettings}>
           설정하기
         </button>
       </div>
     );
   }
 
+  // ===== 전역 정보 있음 → D-DAY 표시 =====
   return (
     <div className="dday-card">
       <div className="dday-header">
         <h2 className="dday-name">
           {name} {rank}님
         </h2>
-        <button className="settings-btn" onClick={onOpenSettings}>
+        <button className="dday-setting-btn small" onClick={onOpenSettings}>
           ⚙️
         </button>
       </div>
 
       <p className="dday-info">
-        현재 복무일: <strong>{passedDays}일</strong> /{" "}
+        현재 복무일: <strong>{passedDays}일</strong>
         {daysLeft > 0 ? (
-          <>
-            남은 복무일: <strong>D-{daysLeft}</strong>
-          </>
+          <> / 남은 복무일: <strong>D-{daysLeft}</strong></>
         ) : (
           <strong>🎉 전역 완료!</strong>
         )}
@@ -70,10 +68,7 @@ function DdayCounter({ name, startDate, endDate, onOpenSettings }) {
 
       <div className="progress-container">
         <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{ width: `${progress}%` }}
-          ></div>
+          <div className="progress-fill" style={{ width: `${progress}%` }} />
           <span className="progress-overlay">{Math.floor(progress)}%</span>
         </div>
       </div>

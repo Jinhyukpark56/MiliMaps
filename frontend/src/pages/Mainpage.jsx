@@ -3,28 +3,45 @@ import DdayCounter from "../components/forms/DdayCounter";
 import DdaySettingForm from "../components/forms/DdaySettingForm";
 import "../styles/MainPage.css";
 import TabBar from "../components/forms/TabBar";
+import api from "../api/axios";
 
 function MainPage() {
   const [settings, setSettings] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
 
+  // ===== 백엔드에서 유저 정보 불러오기 =====
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("ddaySettings"));
-    if (saved) setSettings(saved);
+    async function loadUserData() {
+      try {
+        const res = await api.get("/user/me");
+
+        if (res.data.status === "success") {
+          const u = res.data.user;
+
+          setSettings({
+            name: u.nickname,
+            startDate: u.enlistDate,
+            endDate: u.dischargeDate,
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    loadUserData();
   }, []);
 
+  // 설정 저장 (현재는 local UI 전환만 수행)
   const handleSaveSettings = (newSettings) => {
     setSettings(newSettings);
     setShowSettings(false);
-    localStorage.setItem("ddaySettings", JSON.stringify(newSettings));
   };
 
   return (
     <div className="app-frame">
-      {" "}
-      {/* 로그인 페이지와 동일한 앱 프레임 */}
       <div className="main-layout">
-        {/* ===== 상단: D-Day 카드 ===== */}
+        {/* ===== 상단: D-Day 영역 ===== */}
         <section className="top-section">
           {!showSettings ? (
             <DdayCounter
@@ -38,12 +55,12 @@ function MainPage() {
           )}
         </section>
 
-        {/* ===== 중간: 오늘의 식단 (추후 추가 예정) ===== */}
+        {/* ===== 중간: 오늘의 식단 ===== */}
         <section className="middle-section">
           <p>오늘의 식단 섹션 (추후 추가 예정)</p>
         </section>
 
-        {/* ===== 하단: 메뉴바 (추후 추가 예정) ===== */}
+        {/* ===== 하단 메뉴 ===== */}
         <footer className="bottom-section">
           <TabBar />
         </footer>
