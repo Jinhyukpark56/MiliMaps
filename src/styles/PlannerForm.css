@@ -1,0 +1,90 @@
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f5f6fa;
+  color: #222;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+.container { width: 90%; max-width: 800px; margin-top: 40px; }
+
+h1 { text-align: center; margin-bottom: 5px; color: #333; }
+
+#monthContainer { display: flex; justify-content: center; align-items: center; margin-bottom: 20px; }
+#monthDisplay { margin: 0 20px; color: #555; }
+
+.arrow-btn { background-color: #ffffff; color: #000000; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.arrow-btn:hover { background-color: #4d4d4d; }
+
+#calendar { background-color: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+table { width: 100%; border-collapse: collapse; color: #222; }
+th, td { width: 14.2%; text-align: center; padding: 10px; border: 1px solid #ddd; height: 90px; vertical-align: top; position: relative; cursor: pointer; }
+th { background-color: #f1f3f5; }
+td:hover { background-color: #f8f9fa; }
+.day-number { font-size: 0.9rem; opacity: 0.8; }
+.other-month { opacity: 0.4; }
+.event-label { display: block; margin-top: 4px; font-size: 0.8rem; color: #fff;
+  text-align: left; font-weight: 600; padding: 2px 5px; border-radius: 4px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+.bg-휴가 { background-color: #2ecc71; }
+.bg-외출외박 { background-color: #3498db; }
+.bg-훈련 { background-color: #e67e22; }
+.bg-당직근무 { background-color: #e74c3c; }
+.selected-start { border: 2px solid #4dabf7; background-color: #e8f4ff !important; }
+.selected-end { border: 2px solid #4dabf7; background-color: #e8f4ff !important; }
+.today { border: 2px solid #2c2c2c; border-radius: 6px; }
+.sun { color: #e03131; font-weight: 600; }
+.sat { color: #228be6; font-weight: 600; }
+.modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%;
+  height: 100%; background-color: rgba(0,0,0,0.3); justify-content: center; align-items: center; }
+.modal-content { background-color: #fff; padding: 20px; border-radius: 10px;
+  width: 340px; color: #333; box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  max-height: 80vh; overflow-y: auto; }
+input, select { width: 90%; padding: 10px; margin-top: 8px; border-radius: 6px;
+  border: 1px solid #ccc; background-color: #fff; color: #333; }
+.modal-actions { display: flex; justify-content: space-between; margin-top: 15px; }
+.save-btn, .cancel-btn, .delete-btn { padding: 10px; border: none; border-radius: 6px;
+  font-weight: 600; cursor: pointer; }
+.save-btn { background-color: #4dabf7; color: white; }
+.cancel-btn { background-color: #adb5bd; color: white; }
+.delete-btn { background-color: #e03131; color: white; margin-top: 8px; width: 100%; }
+.cancel-btn:hover { background-color: #868e96; }
+.save-btn:hover { background-color: #74c0fc; }
+.delete-btn:hover { background-color: #c92a2a; }
+
+.event-card { background-color: #f9fafb; border: 1px solid #ddd; border-radius: 8px;
+  padding: 10px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); text-align: left; }
+.event-card .event-title { font-weight: bold; margin-bottom: 6px; }
+.event-card small { color: #a3a3a3; font-size: 0.8rem; }
+
+.dark-mode { background-color: #303030; color: #eaeaea; }
+.dark-mode h1 { color: #d5d5d5; /* 제목 선명하게 */ }
+.dark-mode #calendar { background-color: #222; box-shadow: 0 0 10px rgba(255,255,255,0.05); }
+.dark-mode th { background-color: #333; color: #e6e6e6; }
+.dark-mode td { border-color: #444; color: #cccccc; /* 날짜 기본 텍스트 밝게 */ }
+.dark-mode .sun { color: #ff6b6b; /* 빨간색 강조 */ }
+.dark-mode .sat { color: #4dabf7; /* 파란색 강조 */ }
+.dark-mode .day-number { opacity: 1 !important; /* 숫자 흐려지는 현상 제거 */ }
+.dark-mode .event-label { border: 1px solid rgba(0,0,0,0.2); }
+.dark-mode .modal-content { background-color: #2a2a2a; color: white; }
+.dark-mode input, .dark-mode select { background-color: #3a3a3a; color: #fff;
+  border: 1px solid #666; }
+.dark-mode .save-btn { background-color: #4dabf7; }
+.dark-mode .cancel-btn {  background-color: #666; }
+.dark-mode .delete-btn { background-color: #e03131; }
+.dark-mode .today { border: 2px solid #ffffff; border-radius: 6px; font-weight: 700; color: #fff;}
+.dark-mode .arrow-btn { color: #fff; background-color: #2a2a2a; border-color: #555;}
+.dark-mode .event-card { background-color: #2a2a2a; color: #f1f1f1; }
+.dark-mode #monthDisplay { margin: 0 20px; color: #949494; }
+.dark-mode .selected-start { border: 2px solid #4dabf7; background-color: #626262 !important; }
+.dark-mode .selected-end { border: 2px solid #74c0fc; background-color: #626262 !important; }
+.dark-mode th { border: 1px solid #3e3e3e; }
+.dark-mode td { border: 1px solid #3e3e3e; }
+.dark-mode td:hover { background-color: #404040; }
+.dark-mode .theme-btn { background-color: #525252; color: #fff; }
+
+.theme-btn { position: fixed; top: 12px; right: 12px; padding: 10px 14px; border: none; 
+  border-radius: 6px; cursor: pointer; font-weight: 600; background-color: #ebebeb; color: #292929}
