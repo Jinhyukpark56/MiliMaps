@@ -1,0 +1,38 @@
+.today-menu-card {
+    margin-top: 24px;
+}
+
+.today-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-main);
+}
+
+.menu-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.menu-block {
+    border-top: 1px solid var(--input-border);
+    padding-top: 12px;
+}
+
+.menu-label {
+    font-weight: 600;
+    color: var(--green);
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.menu-list {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.menu-list-item {
+    color: var(--text-sub);
+    margin-bottom: 4px;
+}

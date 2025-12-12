@@ -7,19 +7,22 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// ========== 전역일 계산 함수 ==========
+// =======================
+// 전역일 계산 함수
+// =======================
 function calcDischargeDate(enlistDate, serviceDays) {
   const date = new Date(enlistDate);
-  date.setDate(date.getDate() + serviceDays);
+  date.setDate(date.getDate() + Number(serviceDays));
   return date.toISOString().split("T")[0];
 }
 
-// ========== 회원가입 ==========
+// =======================
+// 회원가입
+// =======================
 router.post("/signup", async (req, res) => {
   const { email, password, nickname, enlistDate, serviceDays } = req.body;
 
   try {
-    // 이메일 중복 체크
     const [exist] = await pool.query(
       "SELECT * FROM user WHERE email = ?",
       [email]
@@ -33,11 +36,11 @@ router.post("/signup", async (req, res) => {
     }
 
     const hashed = await bcrypt.hash(password, 10);
-
     const dischargeDate = calcDischargeDate(enlistDate, serviceDays);
 
     await pool.query(
-      "INSERT INTO user (email, password, nickname, enlistDate, serviceDays, dischargeDate) VALUES (?, ?, ?, ?, ?, ?)",
+      `INSERT INTO user (email, password, nickname, enlistDate, serviceDays, dischargeDate)
+       VALUES (?, ?, ?, ?, ?, ?)`,
       [email, hashed, nickname, enlistDate, serviceDays, dischargeDate]
     );
 
@@ -55,7 +58,9 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// ========== 로그인 ==========
+// =======================
+// 로그인
+// =======================
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -73,7 +78,6 @@ router.post("/login", async (req, res) => {
     }
 
     const user = rows[0];
-
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
@@ -83,7 +87,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // 토큰 발급 (DB 컬럼 userId 기준)
     const token = jwt.sign(
       { id: user.userId },
       JWT_SECRET,
@@ -107,7 +110,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ========== JWT 인증 후 유저 정보 조회 ==========
+// =======================
+// 로그인 유지용 (/user/me)
+// =======================
 router.get("/me", async (req, res) => {
   const auth = req.headers.authorization;
 
@@ -118,20 +123,18 @@ router.get("/me", async (req, res) => {
     });
   }
 
-  const token = auth.split(" ")[1];
-
   try {
+    const token = auth.split(" ")[1];
     const decoded = jwt.verify(token, JWT_SECRET);
 
     const [rows] = await pool.query(
       `
-  SELECT userId, email, nickname, role, enlistDate, serviceDays, dischargeDate
-  FROM user
-  WHERE userId = ?
-  `,
+      SELECT userId, email, nickname, role, enlistDate, serviceDays, dischargeDate
+      FROM user
+      WHERE userId = ?
+      `,
       [decoded.id]
     );
-
 
     if (rows.length === 0) {
       return res.status(404).json({
@@ -149,6 +152,52 @@ router.get("/me", async (req, res) => {
     return res.status(401).json({
       status: "error",
       message: "토큰 오류",
+    });
+  }
+});
+
+// =======================
+// 전역일 수정 (입대일, 복무일 수정)
+// =======================
+router.put("/update", async (req, res) => {
+  const auth = req.headers.authorization;
+  const { enlistDate, serviceDays } = req.body;
+
+  if (!auth || !auth.startsWith("Bearer ")) {
+    return res.status(401).json({
+      status: "error",
+      message: "토큰 없음",
+    });
+  }
+
+  try {
+    const token = auth.split(" ")[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userId = decoded.id;
+
+    const newDischargeDate = calcDischargeDate(enlistDate, serviceDays);
+
+    await pool.query(
+      `
+      UPDATE user
+      SET enlistDate = ?, serviceDays = ?, dischargeDate = ?
+      WHERE userId = ?
+      `,
+      [enlistDate, serviceDays, newDischargeDate, userId]
+    );
+
+    return res.json({
+      status: "success",
+      enlistDate,
+      serviceDays,
+      dischargeDate: newDischargeDate,
+    });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      status: "error",
+      message: "업데이트 실패",
     });
   }
 });

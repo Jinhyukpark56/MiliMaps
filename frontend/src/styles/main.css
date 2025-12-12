@@ -1,0 +1,33 @@
+/* ============================
+   📱 MAIN PAGE LAYOUT (B 스타일)
+   ============================ */
+
+.page-container {
+    width: 100%;
+    max-width: 450px;
+    min-height: 100vh;
+    background: var(--bg-color);
+    margin: 0 auto;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 80px;
+    /* TabBar 공간 확보 */
+}
+
+.content-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.meal-section {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    color: var(--text-main);
+    text-align: center;
+}

@@ -1,25 +1,30 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/TabBar.css";
 
-
 function TabBar() {
+    const navigate = useNavigate();
+
     return (
-        <div className="tab-bar">
-            <button className="tab-button">
-                <span className="icon"><i className="bi bi-calendar3"></i></span>
-                <span className="label">전역일계산기</span>
+        <div className="tabbar">
+            <button className="tab-item" onClick={() => navigate("/main")}>
+                <i className="bi bi-calendar3"></i>
+                <span>전역일</span>
             </button>
-            <button className="tab-button">
-                <span className="icon"><i className="bi bi-airplane"></i></span>
-                <span className="label">휴가 플래너</span>
+
+            <button className="tab-item" onClick={() => navigate("/planner")}>
+                <i className="bi bi-airplane"></i>
+                <span>휴가</span>
             </button>
-            <button className="tab-button">
-                <span className="icon"><i className="bi bi-geo-alt"></i></span>
-                <span className="label">지도</span>
+
+            <button className="tab-item" onClick={() => navigate("/map")}>
+                <i className="bi bi-geo-alt"></i>
+                <span>지도</span>
             </button>
-            <button className="tab-button">
-                <span className="icon"><i className="bi bi-gear"></i></span>
-                <span className="label">설정</span>
+
+            <button className="tab-item" onClick={() => navigate("/settings")}>
+                <i className="bi bi-gear"></i>
+                <span>설정</span>
             </button>
         </div>
     );

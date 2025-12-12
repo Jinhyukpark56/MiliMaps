@@ -1,0 +1,19 @@
+
+
+.login-container {
+  width: 100%;
+  max-width: 450px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: var(--bg-color);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 세로 중앙 */
+  align-items: center;
+  padding: 20px;
+}
+
+.login-card-wrapper {
+  width: 100%;
+}
